@@ -24,6 +24,7 @@ switch ($action) {
 			$utilisateur->setUtelephone($_POST['utilisateur']['U_telephone']);
 			$utilisateur->setUDateCreation();
 			
+			// tableau d'erreur qui se remplit à chaque erreur dans un des setter
 			$erreur = $utilisateur->getErreurUtilisateur();
 			if (empty($erreur)) {
 				$utilisateur->ajouterPersonne();
@@ -60,6 +61,7 @@ switch ($action) {
 			echo "<center><font color=red>Votre identifiant est faux</font></center>";
 		}
 		break;
+
 	case "profil" :
 
 		$utilisateur = new ModelUtilisateur();

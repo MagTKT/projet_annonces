@@ -18,7 +18,6 @@ class ModelUtilisateur{
 		$pattern = '/^.+\@\S+\.\S+$/';
         if(preg_match($pattern,$mail)){
 			$this->U_mail = $mail;
-            return false; //pas d'erreur
         }
         $this->erreur[] =  'Le mail n\'est pas valide';
 	}
@@ -40,8 +39,8 @@ class ModelUtilisateur{
         if($tel){
             $pattern = '/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\0-9]*$/';
             if(preg_match($pattern,$tel)){
+				//pb avec le regex, ne prend pas en compte la taille
 				$this->U_telephone = $tel;
-				return false;
             }else{
 				$this->erreur[] = 'Le numéro de téléphone n\'est pas valide';
 			}
@@ -54,6 +53,8 @@ class ModelUtilisateur{
 		$this->U_dateCreation = date('Y-m-d H:i:s');
 	}
 
+
+#---------- FONCTION TECHNIQUE ----------#	
 
 	public function ajouterPersonne() {
         try {
@@ -75,7 +76,7 @@ class ModelUtilisateur{
 					:photoprofil)'
 			);
 
-			$sql->bindValue("pseudo",$this->U_pseudo,PDO::PARAM_STR);
+			$sql->bindValue("pseudo",$this->U_pseudo,PDO::PARAM_STR);// vérifie que le type est bien string
 			$sql->bindValue("mdp",$this->U_mdp,PDO::PARAM_STR);
 			$sql->bindValue("mail",$this->U_mail,PDO::PARAM_STR);
 			$sql->bindValue("tel",$this->U_telephone,PDO::PARAM_INT);
@@ -98,7 +99,7 @@ class ModelUtilisateur{
 			$sql->bindValue("mail",$mail,PDO::PARAM_STR);
 			$sql->execute();
 
-			$unUtilisateur = $sql->fetch();
+			$unUtilisateur = $sql->fetch();//recup une ligne (fetchAll sinon)
 			
 			return $unUtilisateur;
 
@@ -121,7 +122,7 @@ class ModelUtilisateur{
         } catch (PDOException $e) {
             echo $e->getMessage();
             die("Erreur dans la BDD ");
-        	}		
+        }		
 	}
 
 // 	public static function getListeUtilisateur() {
