@@ -24,11 +24,11 @@ switch ($action) {
 			include "vues/profil/ModifProfil.php";
 		}
 		break;
-	}
+	}/*
 	case "mesMessages" :{
 		$id = $_SESSION['id'];
-		$messages = ModelTrajet::getMessageTrajet($id);
+		$messages = ModelAnnonce::getMessageAnnonce($id);
 		include 'vues/profil/afficherMessage.php';
 		break;
-	}
+	}*/
 }

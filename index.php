@@ -5,37 +5,23 @@
 
 <?php
 session_start();
-require_once './modele/ModelPersonne.php';
-require_once './modele/ModelTrajet.php';
+require_once './modele/ModelUtilisateur.php';
+require_once './modele/ModelAnnonce.php';
 require_once './modele/ModelProfil.php';
 include("vues/entete.php");
 include("vues/sommaire.php");
 echo "<br>";
-if(isset($_SESSION['id']))
-	{
-		?>
-		<div id=admin>
-			<?php
-				if($_SESSION['admin']==1)
-				{
-					echo "<h3>ADMINISTRATEUR</h3>";
-				}
-			?>
-		</div>
-		<?php
-	}
-echo "<br><br>";
 if(isset($_REQUEST['controleur']))
 {
 	$ctl = $_REQUEST['controleur'];
 
 	switch ($ctl) {
-		case "trajet" :{
-			include 'controleur/ctlTrajet.php';
+		case "annonce" :{
+			include 'controleur/ctlAnnonce.php';
 			break;
 		}
-		case "personne" :{
-			include 'controleur/ctlPersonne.php';
+		case "utilisateur" :{
+			include 'controleur/ctlUtilisateur.php';
 			break;
 		}
 		case "profil" :{
