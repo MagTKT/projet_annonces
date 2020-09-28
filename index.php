@@ -1,44 +1,38 @@
 <!DOCTYPE html>
-<head>
-   <link href="vues/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<html lang="fr">
 
-<?php
-session_start();
-require_once './modele/ModelUtilisateur.php';
-require_once './modele/ModelAnnonce.php';
-require_once './modele/ModelProfil.php';
-include("vues/entete.php");
-include("vues/sommaire.php");
-echo "<br>";
-if(isset($_REQUEST['controleur']))
-{
-	$ctl = $_REQUEST['controleur'];
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+		integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+		crossorigin="anonymous">
 
-	switch ($ctl) {
-		case "annonce" :{
-			include 'controleur/ctlAnnonce.php';
-			break;
-		}
-		case "utilisateur" :{
-			include 'controleur/ctlUtilisateur.php';
-			break;
-		}
-		case "profil" :{
-			include 'controleur/cltProfil.php';
-			break;
-		}
+		<title>Projet Petites Annonces</title>
 
-		case "deconnexion" :{
-			session_destroy();
-			header('Location:index.php');
-			break;
-		}
-		case "connecte" :{
-			break;
-		}
-	}	
-}
+	</head>
+	<body>
+		<?php  require('vues/navbar.php');?>
+		<div id="content" class="container">
 
-include("vues/pied.php");
-?>
+			<?php
+			$controleur = ''; // renverras vers page defaut dans le routeur
+			$action = '';
+			
+			require_once __DIR__ . '/controleur/routeur.php';
+
+			if (isset($_REQUEST['controleur'])) {
+				$controleur = $_REQUEST['controleur'];
+			}
+			if (isset($_REQUEST['action'])) {
+				$action = $_REQUEST['action'];
+			}	
+			$router = new router();
+			$router->getRoute($controleur,$action);
+
+			?>
+
+		</div>
+
+	</body>
+</html>

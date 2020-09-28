@@ -1,23 +1,106 @@
 <?php
+// remplacer switch par try/catch ?
+
+require_once './modele/functionBDD.php';
 require_once './modele/ModelUtilisateur.php';
-$action= $_REQUEST['action'];
+
+// $action recup dans routeur.php
 switch ($action) {
-	case "newUtilisateur" :{
-			if(isset($_POST['U_pseudo'])&& isset($_POST['U_mail'])&& isset($_POST['U_mdp'])&& isset($_POST['U_telephone']))
-			{
-				$login = $_POST['U_pseudo'];
-				$mail = $_POST['U_mail'];
-				$mdp=$_POST['U_mdp'];
-				$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
-				$tel=$_POST['U_telephone'];
-				$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $prenom, $mail, $mdphash, $tel);
-				header('Location: index.php?controleur=utilisateur&action=listeUtilisateur');
-			}else
-			{
-				include 'vues/utilisateur/addUtilisateur.php';
+	case "pageConnexion":
+		include ('vues/connexion.php');
+		break;
+
+	case "inscription":
+		include ('vues/utilisateur/addUtilisateur.php');
+		break;
+
+	case "newPersonne":
+		if(isset($_POST['utilisateur'])){
+			//tableau ayant tous les champs de l'utilisateur
+			$utilisateur = new ModelUtilisateur();
+			$utilisateur->setUPseudo($_POST['utilisateur']['U_pseudo']);
+			$utilisateur->setUMail($_POST['utilisateur']['U_mail']);
+			$utilisateur->setUmdp($_POST['utilisateur']['U_mdp'],$_POST['utilisateur']['check_U_mdp']);
+			$utilisateur->setUtelephone($_POST['utilisateur']['U_telephone']);
+			$utilisateur->setUDateCreation();
+			
+			$erreur = $utilisateur->getErreurUtilisateur();
+			if (empty($erreur)) {
+				$utilisateur->ajouterPersonne();
+				include ('vues/connexion.php');
+			}else{
+				include ('vues/utilisateur/addUtilisateur.php');
+				foreach($erreur as $uneErreur){
+					echo $uneErreur."<br>";
+				}
 			}
-			break;
 		}
+		break;
+
+	case "validerLogin" :
+		$email = $_POST['email'];
+		$mdp = $_POST['mdp'];
+		$utilisateur = new ModelUtilisateur();
+
+		$exist = $utilisateur->getLoginUtilisateur($email);
+
+		if($exist){
+			if(password_verify($mdp, $exist['U_mdp'])){
+				session_start();
+				$_SESSION['id'] = $exist['U_id'];
+				$_SESSION['login'] = $exist['U_pseudo'];
+				// var_dump($_SESSION);
+				header("Location: index.php?controleur=utilisateur&action=profil");
+			}else{
+				include ('vues/connexion.php');
+				echo "<center><font color=red>Votre mot de passe est faux</font></center>";
+			}
+		}else{
+			include ('vues/connexion.php');
+			echo "<center><font color=red>Votre identifiant est faux</font></center>";
+		}
+		break;
+	case "profil" :
+
+		$utilisateur = new ModelUtilisateur();
+
+		$exist = $utilisateur->getUtilisateur($_SESSION['id']);
+		echo 'ici';
+		var_dump($_SESSION);//session undefined
+		if($exist){
+
+		}else{
+			echo "<center><font color=red>pas d'util trouvé</font></center>";
+		}
+		break;
+
+	// function passMember($password, $password2 )
+	// {
+	// 	try{
+	// 		// creer une instance de Usermanager
+	// 			$userManager = new UserManager();
+	// 			//si les mot de passe sont different
+	// 			if ($password != $password2){
+	// 				throw new Exception('Les mots de passe ne correspondent pas');
+	// 			}
+	// 			//crée un password hashé
+	// 			$password = password_hash($password, PASSWORD_DEFAULT);
+	// 			//insert dans la bdd
+	// 			$push = $userManager->pushMember($password);
+	
+	// 			throw new Exception('Votre mot de passe à été modifier avec succès');
+	// 		}
+	// 		catch(Exception $e){
+	// 			$info = $e->getMessage();
+	// 			require('view/backend/newPassView.php');
+	// 		}
+	// }
+	// ? >
+
+
+
+
+
 	case "modifUtilisateur" :{
 			if(!isset($_GET['U_id']))
 			{
@@ -43,28 +126,7 @@ switch ($action) {
 			header('Location: index.php?controleur=utilisateur&action=listeUtilisateur');
 			break;
 		}
-	case "validerLogin" :{
-		
-		$login = $_POST['login'];
-		$mdp = $_POST['mdp'];
-		$ligne = ModelUtilisateur::getLoginUtilisateur($login);
-		if(is_array($ligne))
-		{
-			if(password_verify($mdp, $ligne['U_mdp']))
-			{
-				$_SESSION['id'] = $ligne['U_id'];
-				$_SESSION['login'] = $ligne['U_mail'];
-				header("Location: index.php?controleur=connecte");
-			}else
-			{
-				echo "<center><font color=red>Votre mot de passe est faux</font></center>";
-			}
-		}else
-		{
-			echo "<center><font color=red>Votre identifiant est faux</font></center>";
-		}
-		break;
-	}
+
 	/*case "validerLogin" :{
 		$login=$_POST['login'];
 		$mdp=$_POST['mdp'];

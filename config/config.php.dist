@@ -1,0 +1,8 @@
+<?php
+
+const DATABASE_CONFIG = [
+    'DB_HOSTNAME' => 'monHost',
+    'DB_NAME' => 'maBase',
+    'LOGIN' => 'monLogin',
+    'PASSWORD' => 'monPassword'
+];
