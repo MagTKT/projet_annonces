@@ -7,7 +7,6 @@
 session_start();
 require_once './modele/ModelUtilisateur.php';
 require_once './modele/ModelAnnonce.php';
-require_once './modele/ModelProfil.php';
 include("vues/entete.php");
 include("vues/sommaire.php");
 echo "<br>";
@@ -28,7 +27,10 @@ if(isset($_REQUEST['controleur']))
 			include 'controleur/cltProfil.php';
 			break;
 		}
-
+		case "connexion" : {
+			include 'vues/utilisateur/formLogin.php'; 
+		break;
+		}
 		case "deconnexion" :{
 			session_destroy();
 			header('Location:index.php');

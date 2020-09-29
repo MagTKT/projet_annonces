@@ -24,9 +24,9 @@ class ModelUtilisateur extends ModelPdo {
             die("Erreur dans la BDD ");
         	}		
 	}
-	public static function ajouterUtilisateur($pseudo, $mail, $mdp, $tel, $dateCreation) {
+	public static function ajouterUtilisateur($pseudo, $mdp, $mail, $tel) {
         try {		
-			$sql="INSERT INTO utilisateur(U_pseudo, U_mdp, U_mail, U_telephone, U_dateCreation) VALUES ('".$pseudo."', '".$mdp."', '".$mail."', '".$tel."', '".$dateCreation."')";
+			$sql="INSERT INTO utilisateur(U_pseudo, U_mdp, U_mail, U_telephone) VALUES ('".$pseudo."', '".$mdp."', '".$mail."', '".$tel."')";
 			$result=ModelPdo::$pdo->exec($sql);	
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -36,23 +36,53 @@ class ModelUtilisateur extends ModelPdo {
 	public static function supprUtilisateur($code) {
    		try {
 	   		$sql = "DELETE FROM utilisateur WHERE U_id=$code";
-			echo $sql;
+			//echo $sql;
 	   		$result=ModelPdo::$pdo->exec($sql);
    		} catch (PDOException $e) {
 	   		echo $e->getMessage();
 	   		die("Erreur dans la BDD");
    			}
-   }
-	public static function editUtilisateur($id, $tel,/* $mdp,*/ $mail) {
+    }
+	public static function editMailUtilisateur($id, $mail) {
    		try {
-	   		$sql = "UPDATE utilisateur SET U_mail='$mail', U_telephone='$tel', U_mdp='$mdp' WHERE U_id=$id";
-	   		echo $sql;
+	   		$sql = "UPDATE utilisateur SET U_mail='$mail' WHERE U_id=$id";
+	   		//echo $sql;
 	   		$result=ModelPdo::$pdo->exec($sql);
    		} catch (PDOException $e) {
 	   		echo $e->getMessage();
 	   		die("Erreur dans la BDD");
-   			}
-   }
+   		}
+   	}
+   	public static function editPseudoUtilisateur($id, $pseudo) {
+   		try {
+	   		$sql = "UPDATE utilisateur SET U_pseudo='$pseudo' WHERE U_id=$id";
+	   		//echo $sql;
+	   		$result=ModelPdo::$pdo->exec($sql);
+   		} catch (PDOException $e) {
+	   		echo $e->getMessage();
+	   		die("Erreur dans la BDD");
+   		}
+  	}
+   	public static function editTelUtilisateur($id, $tel) {
+   		try {
+	   		$sql = "UPDATE utilisateur SET U_telephone='$tel' WHERE U_id=$id";
+	   		//echo $sql;
+	   		$result=ModelPdo::$pdo->exec($sql);
+   		} catch (PDOException $e) {
+	   		echo $e->getMessage();
+	   		die("Erreur dans la BDD");
+   		}
+   	}
+   	public static function editPhotoUtilisateur($id, $photo) {
+   		try {
+	   		$sql = "UPDATE utilisateur SET U_photoProfil='$photo' WHERE U_id=$id";
+	   		//echo $sql;
+	   		$result=ModelPdo::$pdo->exec($sql);
+   		} catch (PDOException $e) {
+	   		echo $e->getMessage();
+	   		die("Erreur dans la BDD");
+   		}
+   	}
    public static function getLoginUtilisateur($mail) {
 	   try {
 		   $sql = "SELECT * FROM utilisateur WHERE U_mail = '$mail'";
@@ -63,7 +93,7 @@ class ModelUtilisateur extends ModelPdo {
 		   echo $e->getMessage();
 		   die("Erreur dans la BDD");
 	   }
-   }
+    }
    public static function verifLoginUnique($mail) {//sans doute useless
         try {
 			$sql="SELECT U_mail FROM utilisateur where U_mail=? ";
@@ -134,9 +164,9 @@ class ModelUtilisateur extends ModelPdo {
 		die("Erreur dans la BDD");
 		}
 	}
-	public static function modifmdp($mail, $nouvmdp){
+	public static function modifmdp($id, $nouvmdp){
 		try{
-			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_mail='$mail'";
+			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_id='$id'";
 			echo $sql;
 	   		$result=ModelPdo::$pdo->exec($sql);
 	   	}catch (PDOException $e)

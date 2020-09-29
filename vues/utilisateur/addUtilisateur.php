@@ -1,6 +1,6 @@
 <div id="contenu">
-	<h2>Ajouter une personne</h2><hr>
-<form method='post' action="index.php?controleur=personne&action=newPersonne">
+	<h2>Ajouter un utilisateur</h2><hr>
+<form method='post' action="index.php?controleur=utilisateur&action=newUtilisateur">
 	<table border="1" cellpadding="15">
 		<tr>
 		<th>Pseudo</th>

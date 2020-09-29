@@ -4,7 +4,7 @@ class ModelAnnonce extends ModelPdo {
 	
 	public static function getLiteAnnonce(){
         try {
-			$sql = "SELECT  * FROM annonce ORDER BY tra_date";
+			$sql = "SELECT  * FROM annonce ORDER BY A_dateCreation";
 			$result=ModelPdo::$pdo->query($sql);
 			$liste=$result->fetchAll();
 			return $liste;
@@ -50,6 +50,20 @@ class ModelAnnonce extends ModelPdo {
 			die("Erreur dans la BDD");
 		}
 	}
+	public static function getMesAnnonces(){
+		try{
+			$id = $_SESSION['id'];
+			$sql = "SELECT * FROM annonce, utilisateur 
+			WHERE annonce.A_createur = utilisateur.U_id
+			AND annonce.A_createur = '$id'";
+			$result = ModelPdo::$pdo->query($sql);
+			$liste = $result->fetchAll();
+			return $liste;
+		}catch(PDOException $e) {
+			echo $e->getMessage();
+			die("Erreur dans la BDD");
+		}
+	}
 	public static function getSesAnnonces($id){
 		try{
 			$sql = "SELECT * FROM annonce, utilisateur 
@@ -76,10 +90,10 @@ class ModelAnnonce extends ModelPdo {
         	}		
 	}
 
-	public static function AjouterAnnonce($id, $titre, $prix, $description, $dateCreation, $photo1, $photo2, $photo3){
+	public static function AjouterAnnonce($id, $titre, $prix, $description, $dateFin, $photo1, $photo2, $photo3){
 		try{
-			$sql = "INSERT INTO annonce(A_titre, A_prix, A_description, A_createur, A_dateCreation, A_photo1, A_photo2, A_photo3) 
-					VALUES ('".$titre."', '".$prix."', '".$description."', '".$id."', '".$dateCreation."', '".$photo1."', '".$photo2."', '".$photo3."') ";
+			$sql = "INSERT INTO annonce(A_titre, A_prix, A_description, A_datedeFin, A_createur, A_photo1, A_photo2, A_photo3) 
+					VALUES ('".$titre."', '".$prix."', '".$description."', '".$dateFin."', '".$id."', '".$photo1."', '".$photo2."', '".$photo3."') ";
 			$result = ModelPdo::$pdo->exec($sql);
 		}catch(PDOException $e) {
 			echo $e->getMessage;
@@ -89,22 +103,58 @@ class ModelAnnonce extends ModelPdo {
 	public static function suppAnnonce($code){
 		try{
 			$sql = "DELETE FROM annonce WHERE A_id = '$code'";
+			//echo $sql;
 			$result = ModelPdo::$pdo->exec($sql);
 		}catch(PDOException $e) {
 			echo $e->getMessage;
 			die("Erreur dans la BDD");
 		}
 	}
-	public static function editAnnonce($id, $titre, $prix, $description, $dateCreation, $photo1, $photo2, $photo3){
+	public static function editAnnonce($id, $titre, $prix, $description, $dateFin){
 		try{
-			$sql = "UPDATE annonce SET A_titre = '$titre', A_prix = '$prix', A_description = '$description', A_dateCreation = '$dateCreation', A_phpto1 = '$photo1', A_phpto2 = '$photo2', A_phpto3 = '$photo3' 
-					WHERE A_createur = '$id'";
+			$sql = "UPDATE annonce SET A_titre = '$titre', A_prix = '$prix', A_description = '$description', A_dateDeFin = '$dateFin'
+					WHERE A_id = '$id'";
+			echo $sql;
 			$result = ModelPdo::$pdo->exec($sql);
 		}catch(PDOException $e) {
 			echo $e->getMessage;
 			die("Erreur dans la BDD");
 		}
 	}
+	public static function editAnnoncePhoto1($id, $photo1){
+		try{
+			$sql = "UPDATE annonce SET A_photo1 = '$photo1' 
+					WHERE A_id = '$id'";
+			//echo $sql;
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
+	public static function editAnnoncePhoto2($id, $photo2){
+		try{
+			$sql = "UPDATE annonce SET A_photo2 = '$photo2' 
+					WHERE A_id = '$id'";
+			//echo $sql;
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
+	public static function editAnnoncePhoto3($id, $photo3){
+		try{
+			$sql = "UPDATE annonce SET A_photo3 = '$photo3' 
+					WHERE A_id = '$id'";
+			//echo $sql;
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
+	/*
 	public static function RechercheAnnonce($titre, $prix, $description, $dateCreation){
 		try{
 			$sql = "SELECT DISTINCT(annonce.A_id), utilisateur.U_pseudo, utilisateur.U_telephone, annonce.A_titre, annonce.A_prix
@@ -125,7 +175,7 @@ class ModelAnnonce extends ModelPdo {
 			die("Erreur dans la BDD");
 		}
 	}
-
+	*/
 	public static function getCreateur($code){
 		try{
 			$sql = "SELECT * FROM annonce WHERE A_id = '$code'";

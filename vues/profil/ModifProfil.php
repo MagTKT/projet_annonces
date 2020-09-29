@@ -4,30 +4,43 @@
 	<center>
 		<table border="1" cellpadding="15">
 			<tr>
-			<th>ID</th>
-			<th>Pseudo</th>
-			<th>Mail</th>
-			<th>Téléphone</th>
-			<th rowspan="2"><input type=submit name=valider></th>
+				<th>Pseudo</th>
+				<th>Mail</th>
+				<th>Téléphone</th>
+				<th>Mot de passe actuel</th>
+				<th>Nouveau mot de passe</th>
+				<th>Verrification du nouveau mot de passe</th>
+				<th>Photo de profil</th>
 			</tr>
 			<tr>
-				<?php
-				foreach($liste as $unProfil)
-				{
-					$nom=$unProfil['U_pseudo'];
-					$mail=$unProfil['U_mail'];
-					$tel=$unProfil['U_telephone'];
-
-				}
+				<td><p><input type=text name=nouvpseudo value=<?= $ligne['U_pseudo']; ?> required></p></td>
+				<td><p><input type=email name=nouvmail value=<?= $ligne['U_mail'] ?> required></p></td>
+				<td><p><input type=number name=nouvtel value=<?= $ligne['U_telephone'] ?> required></p></td>
+				<td>
+					<p><input type=password name=mdpactu required></p>
+				<?php 
+					if(isset($verifactu)&& $verifactu == 0)
+					{
+						echo "<p>votre mot de passe actuel est faux</p>"; 
+						unset($verifactu);
+					}
 				?>
-				<td><?php  echo $code; ?></td>
-				<input type=hidden name=code value=<?php echo $code; ?>>
-				<td><?php echo $nom; ?></td>
-				<td><?php echo $prenom; ?></td>
-				<td><input type=email name=nouvmail value=<?php echo $mail ?>></td>
-				<td><input type=number name=nouvtel value=<?php echo "0".$tel ?>></td>
+				</td>
+				<td><p><input type=password name=nouvmdp required></p></td>
+				<td>
+					<p><input type=password name=mdpconfirm required></p>
+				<?php 
+					if(isset($verif)&& $verif == 0)
+					{
+						echo "<p>Les deux mots de passes doivent être les mêmes</p>";
+						unset($verif);
+					}
+				?>
+				</td>
+				<td><p><input type=file name=nouvphoto value=<?= $ligne['U_photoProfil']; ?>></p></td>
 			</tr>
 		</table>
+		<input type=submit name=valider>
 	</center>
 </form>
 </div>

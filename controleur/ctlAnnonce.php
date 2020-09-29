@@ -8,7 +8,7 @@ switch ($action) {
 		break;
 	}
 	case "listeMesAnnonces" :{
-		$lignes = ModelAnnonce::getListeAnnonce();
+		$lignes = ModelAnnonce::getMesAnnonces();
 		include 'vues/annonce/listeMesAnnonce.php';
 		break;
 	}
@@ -20,10 +20,16 @@ switch ($action) {
 		include 'vues/annonce/listeSesAnnonce.php';
 		break;
 	}
+	case "detailAnnonce" :{
+		$id = $_GET['code_annonce'];
+		$CetteAnnonce = ModelAnnonce::getCetteAnnonce($id);
+		include 'vues/annonce/detailAnnonce.php';
+		break;
+	}
 	case "AjouterAnnonce" :{
-		if(isset($_POST['date_creation'])&& isset($_POST['titre'])&& isset($_POST['prix'])&& isset($_POST['description']))
+		if(isset($_POST['titre'])&& isset($_POST['prix'])&& isset($_POST['description'])&& isset($_POST['dateFin']))
 		{
-			ModelAnnonce::AjouterAnnonce($_SESSION['id'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['date_creation'], $_POST['photo1'], $_POST['photo2'], $_POST['photo3']);
+			ModelAnnonce::AjouterAnnonce($_SESSION['id'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['dateFin'], $_POST['photo1'], $_POST['photo2'], $_POST['photo3']);
 			header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
 		}else
 		{
@@ -32,27 +38,43 @@ switch ($action) {
 		break;
 	}
 	case "suppAnnonce" :{
-		$code = $_GET['A_id'];
+		$code = $_GET['code_annonce'];
 		ModelAnnonce::suppAnnonce($code);
 		header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
 		break;
 	}
 	case "editAnnonce" :{
-		if(isset($_POST['date_annonce'])&& isset($_POST['type_annonce'])&& isset($_POST['heure_staspais'])&& isset($_POST['voiture'])&& isset($_POST['adresse']))
+		if(isset($_POST['codeAnnonce'])&& isset($_POST['titre'])&& isset($_POST['description'])&& isset($_POST['dateFin'])&& isset($_POST['prix']))
 		{
-			$code = $_POST['A_id'];
-			ModelAnnonce::editAnnonce($_SESSION['id'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['date_creation'], $_POST['photo1'], $_POST['photo2'], $_POST['photo3']);
+			ModelAnnonce::editAnnonce($_POST['codeAnnonce'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['codeAnnonce']);
+			if(isset($_POST['photo1'])) 
+			{
+				ModelAnnonce::editAnnoncePhoto1($_POST['codeAnnonce'], $_POST['photo1']);
+			}
+			if(isset($_POST['photo2'])) 
+			{
+				ModelAnnonce::editAnnoncePhoto2($_POST['codeAnnonce'], $_POST['photo2']);
+			}
+			if(isset($_POST['photo3'])) 
+			{
+				ModelAnnonce::editAnnoncePhoto3($_POST['codeAnnonce'], $_POST['photo3']);
+			}
 			header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
 		}else
 		{
-			$code = $_GET['A_id'];
+			$code = $_GET['code_annonce'];
 			$CetteAnnonce = ModelAnnonce::getCetteAnnonce($code);
 			include 'vues/annonce/modifierAnnonce.php';
 		}
 		break;
 	}
+	/*
+	mot clé
+	prix
+	*/
+	/*
 	case "ChercherAnnonce" :{
-		if(isset($_REQUEST['titre'])&& isset($_REQUEST['prix'])&& isset($_REQUEST['description']) && isset($_REQUEST['dateCreation']))
+		if(isset($_REQUEST['titre'])|| isset($_REQUEST['prixMoins'])|| isset($_REQUEST['prixPlus'])|| isset($_REQUEST['description'])|| isset($_REQUEST['dateCreation']))
 		{
 			$titre=$_REQUEST['titre'];
 			$prix=$_REQUEST['prix'];
@@ -67,5 +89,6 @@ switch ($action) {
 		}
 		break;
 	}
+	*/
 }
 ?>

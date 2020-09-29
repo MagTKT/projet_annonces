@@ -5,13 +5,13 @@ switch ($action) {
 	case "newUtilisateur" :{
 			if(isset($_POST['U_pseudo'])&& isset($_POST['U_mail'])&& isset($_POST['U_mdp'])&& isset($_POST['U_telephone']))
 			{
-				$login = $_POST['U_pseudo'];
+				$pseudo = $_POST['U_pseudo'];
 				$mail = $_POST['U_mail'];
 				$mdp=$_POST['U_mdp'];
 				$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
 				$tel=$_POST['U_telephone'];
-				$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $prenom, $mail, $mdphash, $tel);
-				header('Location: index.php?controleur=utilisateur&action=listeUtilisateur');
+				$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel);
+				header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
 			}else
 			{
 				include 'vues/utilisateur/addUtilisateur.php';
@@ -54,6 +54,7 @@ switch ($action) {
 			{
 				$_SESSION['id'] = $ligne['U_id'];
 				$_SESSION['login'] = $ligne['U_mail'];
+				$_SESSION['pseudo'] = $ligne['U_pseudo'];
 				header("Location: index.php?controleur=connecte");
 			}else
 			{

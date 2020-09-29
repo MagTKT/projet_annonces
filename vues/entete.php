@@ -12,13 +12,13 @@
     <div id="global">
     	<div id="entete">
         <center>
-			<h1>Covoiturage </h1>
+			<h1>Petites Annonces </h1>
       </center>
       <?php 
       if(isset($_SESSION['id']))
       {
-        //require_once './modele/ModelPersonne.php';
-        echo "Bienvenue ".$_SESSION['nom']." ".$_SESSION['prenom'];
+        //require_once './modele/ModelUtilisateur.php';
+        echo "Bienvenue ".$_SESSION['pseudo'];
       }
     ?>
     
