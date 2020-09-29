@@ -17,17 +17,12 @@ switch ($action) {
 	case "newPersonne":
 		if(isset($_POST['utilisateur'])){
 			//tableau ayant tous les champs de l'utilisateur
-			$utilisateur = new ModelUtilisateur();
-			$utilisateur->setUPseudo($_POST['utilisateur']['U_pseudo']);
-			$utilisateur->setUMail($_POST['utilisateur']['U_mail']);
-			$utilisateur->setUmdp($_POST['utilisateur']['U_mdp'],$_POST['utilisateur']['check_U_mdp']);
-			$utilisateur->setUtelephone($_POST['utilisateur']['U_telephone']);
-			$utilisateur->setUDateCreation();
-			
-			// tableau d'erreur qui se remplit à chaque erreur dans un des setter
-			$erreur = $utilisateur->getErreurUtilisateur();
+			$utilisateur = new ModelUtilisateur($_POST['utilisateur']['U_pseudo'],$_POST['utilisateur']['U_mail'],$_POST['utilisateur']['U_mdp'],$_POST['utilisateur']['check_U_mdp'],$_POST['utilisateur']['U_telephone']);
+	
+			// gerer => verifie chaque champs insert ou update l'utilisateur
+			// renvoie les erreurs
+			$erreur = $utilisateur->gerer();
 			if (empty($erreur)) {
-				$utilisateur->ajouterPersonne();
 				include ('vues/connexion.php');
 			}else{
 				include ('vues/utilisateur/addUtilisateur.php');
@@ -41,12 +36,13 @@ switch ($action) {
 	case "validerLogin" :
 		$email = $_POST['email'];
 		$mdp = $_POST['mdp'];
-		$utilisateur = new ModelUtilisateur();
+		$utilisateur = new ModelUtilisateur('',$email,$mdp,'','');
 
-		$exist = $utilisateur->getLoginUtilisateur($email);
+		$exist = $utilisateur->getLoginUtilisateur();
 
 		if($exist){
 			if(password_verify($mdp, $exist['U_mdp'])){
+				var_dump('verify');
 				session_start();
 				$_SESSION['id'] = $exist['U_id'];
 				$_SESSION['login'] = $exist['U_pseudo'];
@@ -72,7 +68,7 @@ switch ($action) {
 		if($exist){
 
 		}else{
-			echo "<center><font color=red>pas d'util trouvé</font></center>";
+			echo "<center><font color=red>pas d'utilisateur trouvé</font></center>";
 		}
 		break;
 

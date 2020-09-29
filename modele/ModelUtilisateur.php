@@ -2,27 +2,75 @@
 // require_once 'ModelPdo.php';
 class ModelUtilisateur{
 
-	public $U_pseudo;
-	public $U_mail;
-	public $U_mdp;
-	public $U_telephone;
-	public $U_photoProfil;
-	public $co_db;
-	public $erreur;
+	private $U_pseudo;
+	private $U_mail;
+	private $U_mdp;
+	private $checkmdp;
+	private $U_telephone;
+	private $U_photoProfil;
+	private $co_db;
+	private $erreur;
+
+	public function __construct($pseudo='',$email='',$mdp='',$checkmdp='',$tel=''){
+		$this->U_pseudo = $pseudo;
+		$this->U_mail = $email;
+		$this->U_mdp = $mdp;
+		$this->checkmdp = $checkmdp;
+
+		$this->U_telephone = $tel;
+		$this->setUDateCreation();
+		$this->co_db = dbConnect();
+
+
+	}
 
 	public function setUPseudo($pseudo){
 		$this->U_pseudo = $pseudo;
 	}
 
 	public function setUMail($mail){
-		$pattern = '/^.+\@\S+\.\S+$/';
-        if(preg_match($pattern,$mail)){
-			$this->U_mail = $mail;
-        }
-        $this->erreur[] =  'Le mail n\'est pas valide';
+		$this->U_mail = $mail;
 	}
 
-	public function setUmdp($mdp,$check_U_mdp){
+	public function setUtelephone($tel){
+		$this->U_telephone = $tel;
+	}
+
+	public function setUDateCreation(){
+		$this->U_dateCreation = date('Y-m-d H:i:s');
+	}
+	public function getErreurUtilisateur(){
+		//tableau d'erreur
+		if (empty($this->erreur)) {
+			return false;
+		}else{
+			return $this->erreur;
+		}
+		
+	}
+
+	/*----------------------------------*/
+
+	public function verifFormatUMail($mail){
+		$pattern = '/^.+\@\S+\.\S+$/';
+        if(!preg_match($pattern,$mail)){
+			$this->erreur[] =  'Le mail n\'est pas valide';
+        }
+	}
+
+	public function verifFormatUtelephone($tel){
+		if($tel){
+			//refaire regex
+			$pattern = '/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\0-9]*$/';
+			if(!preg_match($pattern,$tel)){
+				$this->erreur[] = 'Le numéro de téléphone n\'est pas valide';
+			}
+		}else{
+			$this->erreur[] = 'Vous n\'avez pas donné de téléphone';		
+		}
+	}
+
+	public function verifUmdp($mdp,$check_U_mdp){
 		if($mdp === $check_U_mdp){
 			//faire verif regex preg_match
 			$this->U_mdp = password_hash($mdp, PASSWORD_DEFAULT);
@@ -30,36 +78,52 @@ class ModelUtilisateur{
 			$this->erreur[] = 'Les mots de passe sont différents';
 		}
 	}
+#---------- FONCTION TECHNIQUE ----------#	
 
-	public function getErreurUtilisateur(){
-		return $this->erreur;
-	}
+	public function gerer(){
+		if (!$this->U_pseudo) {
+			$this->erreur[] = "Le pseudo est manquant";
+		}
 
-	public function setUtelephone($tel){
-        if($tel){
-            $pattern = '/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\0-9]*$/';
-            if(preg_match($pattern,$tel)){
-				//pb avec le regex, ne prend pas en compte la taille
-				$this->U_telephone = $tel;
-            }else{
-				$this->erreur[] = 'Le numéro de téléphone n\'est pas valide';
+		if($this->U_mail){
+			//getLoginUtilisateur == verif si utilisateur existe via son mail, donc verifie aussi si mail déjà en base
+			if($this->getLoginUtilisateur() == false){
+				$this->verifFormatUMail($this->U_mail);
+			}else{
+				$this->erreur[] = "Le mail est existe déjà en base";
 			}
-        }else{
-	        $this->erreur[] = 'Vous n\'avez pas donné de téléphone';		
+		}else{
+			$this->erreur[] = "Le email est manquant";
+		}
+
+		if($this->U_mdp){
+			$this->verifUmdp($this->U_mdp,$this->checkmdp);
+		}else{
+			$this->erreur[] = "Le mot de passe est manquant";
+		}
+
+		if($this->U_telephone){
+			$this->verifFormatUtelephone($this->U_telephone);
+		}else{
+			$this->erreur[] = "Le téléphone est manquant";
+		}
+
+		if(!$this->getErreurUtilisateur()){
+			//pas d'erreur
+
+			if($this->getLoginUtilisateur() == false){
+				$this->ajouterPersonne();
+			}else{
+				//update
+			}
+		}else{
+			return $this->getErreurUtilisateur();
 		}
 	}
 
-	public function setUDateCreation(){
-		$this->U_dateCreation = date('Y-m-d H:i:s');
-	}
-
-
-#---------- FONCTION TECHNIQUE ----------#	
-
 	public function ajouterPersonne() {
         try {
-			$co_db = dbConnect();
-			$sql = $co_db->prepare('
+			$sql = $this->co_db->prepare('
 				INSERT into utilisateur(
 					U_pseudo,
 					U_mdp,
@@ -90,13 +154,12 @@ class ModelUtilisateur{
             die("Erreur dans la BDD ");
 		}	
 	}
-
-	public function getLoginUtilisateur($mail) {
+	// mail en condition where => permet aussi de voir si un mail est déjà présent en base
+	public function getLoginUtilisateur() {
 		try {
-			$co_db = dbConnect();
-			$sql = $co_db->prepare("SELECT * FROM utilisateur WHERE U_mail = :mail");
+			$sql = $this->co_db->prepare("SELECT * FROM utilisateur WHERE U_mail = :mail");
 
-			$sql->bindValue("mail",$mail,PDO::PARAM_STR);
+			$sql->bindValue("mail",$this->U_mail,PDO::PARAM_STR);
 			$sql->execute();
 
 			$unUtilisateur = $sql->fetch();//recup une ligne (fetchAll sinon)
@@ -111,8 +174,7 @@ class ModelUtilisateur{
 
 	public function getUtilisateur($id) {
         try {
-			$co_db = dbConnect();
-			$sql = $co_db->prepare("SELECT * FROM utilisateur WHERE U_id = :id");
+			$sql = $this->co_db->prepare("SELECT * FROM utilisateur WHERE U_id = :id");
 
 			$sql->bindValue("id",$id,PDO::PARAM_INT);
 			$sql->execute();
