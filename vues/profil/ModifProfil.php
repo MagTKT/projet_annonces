@@ -1,6 +1,6 @@
 <div id="contenu">
 	<h2>Editer mon profil</h2><hr>
-<form method='post' action="index.php?controleur=profil&action=modifProfil">
+<form method='post' action="index.php?controleur=profil&action=modifProfil" enctype="multipart/form-data">
 	<center>
 		<table border="1" cellpadding="15">
 			<tr>
@@ -37,7 +37,7 @@
 					}
 				?>
 				</td>
-				<td><p><input type=file name=nouvphoto value=<?= $ligne['U_photoProfil']; ?>></p></td>
+				<td><p><input type=file name="nouvphoto" value=<?= $ligne['U_photoProfil']; ?>></p></td>
 			</tr>
 		</table>
 		<input type=submit name=valider>

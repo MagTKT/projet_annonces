@@ -11,11 +11,12 @@
 				<th>Photo de profil</th>
 			</tr>
 			<?php
+				$path = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$ligne['U_photoProfil'];
 				echo "<tr><td>".$ligne['U_pseudo']."</td>";
 				echo "<td>".$ligne['U_mail']."</td>"; 
 				echo "<td>".$ligne['U_telephone']."</td>";
 				echo "<td>".$ligne['U_dateCreation']."</td>";
-				echo "<td>".$ligne['U_photoProfil']."</td>";
+				echo "<td><img src='$path'></td>";
 			?>
 		</table>
 		<br><a href="index.php?controleur=profil&action=modifProfil&id="<?= $_SESSION['id']; ?>>Modifier le profil</a>
