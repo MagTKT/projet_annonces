@@ -25,7 +25,7 @@
 		
 		//include("vues/utilisateur/formLogin.php"); 
 		?>
-		
+		<li><a href="index.php?controleur=inscription">Inscription</a></li>
 		<li><a href="index.php?controleur=connexion">Se connecter</a></li>
 		<?php
 	}

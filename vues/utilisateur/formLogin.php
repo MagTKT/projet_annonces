@@ -15,7 +15,8 @@
 				<td><input type=submit name=valider></td>
 			</tr>
 			</table>
-		<a href="vues/utilisateur/motdepasseoublier.php" > Mot de passe oublié ?</a>
+			<a href="index.php?controleur=inscription">Inscription</a>
+			<a href="vues/utilisateur/motdepasseoublier.php" > Mot de passe oublié ?</a>
 		</div>
 	</center>
 </form>

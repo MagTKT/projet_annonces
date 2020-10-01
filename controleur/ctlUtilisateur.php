@@ -3,18 +3,43 @@ require_once './modele/ModelUtilisateur.php';
 $action= $_REQUEST['action'];
 switch ($action) {
 	case "newUtilisateur" :{
-			if(isset($_POST['U_pseudo'])&& isset($_POST['U_mail'])&& isset($_POST['U_mdp'])&& isset($_POST['U_telephone']))
+			if(isset($_POST['U_pseudo'])&& isset($_POST['U_mail'])&& isset($_POST['U_mdp'])&& isset($_POST['check_U_mdp'])&& isset($_POST['U_telephone']))
 			{
 				$pseudo = $_POST['U_pseudo'];
 				$mail = $_POST['U_mail'];
 				$mdp=$_POST['U_mdp'];
-				$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
+				$check_U_mdp=$_POST['check_U_mdp'];
 				$tel=$_POST['U_telephone'];
-				$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel);
-				header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+				$dateCreation = date('Y-m-d H:i:s');
+				
+				$mailExist = ModelUtilisateur::verifemail($mail);
+				if (!$mailExist) {
+					//verifemail($mail) utiliser pour vérifier si le mail existe
+					$loginExist = ModelUtilisateur::verifLoginUnique($pseudo);
+					if (!$loginExist) {
+						if ($mdp === $check_U_mdp) {
+							$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
+							$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel,$dateCreation);
+							header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+						}else{
+							include 'vues/utilisateur/addUtilisateur.php';
+							echo 'Le mot de passe de vérification est différent.';
+						}
+					}else{
+						include 'vues/utilisateur/addUtilisateur.php';
+						echo 'Le pseudo existe déjà en base.';
+					}
+
+				}else{
+					include 'vues/utilisateur/addUtilisateur.php';
+					echo 'Le mail existe déjà en base.';
+				}
+
+
 			}else
 			{
 				include 'vues/utilisateur/addUtilisateur.php';
+				echo 'Tous les champs ne sont pas remplis.';
 			}
 			break;
 		}
