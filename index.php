@@ -27,6 +27,10 @@ if(isset($_REQUEST['controleur']))
 			include 'controleur/cltProfil.php';
 			break;
 		}
+		case "inscription" : {
+			include 'vues/utilisateur/addUtilisateur.php'; 
+		break;
+		}
 		case "connexion" : {
 			include 'vues/utilisateur/formLogin.php'; 
 		break;

@@ -5,12 +5,9 @@ class ModelPdo {
 
     public static function set_instance() {
         $host = 'localhost';
-        /*$dbname = 'projetslam1234_testdb';
-        $login = '168778_projet';
-        $pass = '1234slam1234'; */
         $dbname= 'petites_annonces';
         $login = 'root';
-        $pass= 'root';
+        $pass= '';
 
         try {
             // Connexion à la base de données            

@@ -24,9 +24,9 @@ class ModelUtilisateur extends ModelPdo {
             die("Erreur dans la BDD ");
         	}		
 	}
-	public static function ajouterUtilisateur($pseudo, $mdp, $mail, $tel) {
+	public static function ajouterUtilisateur($pseudo, $mdp, $mail, $tel,$dateCreation) {
         try {		
-			$sql="INSERT INTO utilisateur(U_pseudo, U_mdp, U_mail, U_telephone) VALUES ('".$pseudo."', '".$mdp."', '".$mail."', '".$tel."')";
+			$sql="INSERT INTO utilisateur(U_pseudo, U_mdp, U_mail, U_telephone, U_dateCreation) VALUES ('".$pseudo."', '".$mdp."', '".$mail."', '".$tel."', '".$dateCreation."')";
 			$result=ModelPdo::$pdo->exec($sql);	
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -94,18 +94,12 @@ class ModelUtilisateur extends ModelPdo {
 		   die("Erreur dans la BDD");
 	   }
     }
-   public static function verifLoginUnique($mail) {//sans doute useless
+   public static function verifLoginUnique($pseudo) {
         try {
-			$sql="SELECT U_mail FROM utilisateur where U_mail=? ";
+			$sql="SELECT U_pseudo FROM utilisateur where U_pseudo='$pseudo' ";
 			$result=ModelPdo::$pdo->query($sql);
-			$listeLogin=$result->fetchAll();
-			foreach($listeLogin as $ligne)
-			{
-				if($ligne == $login)
-				{
-					return True;
-				}
-			}
+			$login=$result->fetch();
+			return $login;
         } catch (PDOException $e) {
             echo $e->getMessage();
             die("Erreur dans la BDD ");
