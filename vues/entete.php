@@ -5,7 +5,6 @@
     <title>MSL</title>
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link href="vues/styles.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico" />
   </head>
   <body>

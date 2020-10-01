@@ -12,13 +12,14 @@ switch ($action) {
 		{
 			$log = ModelUtilisateur::getUtilisateur($_SESSION['id']);
 			$mdp = $log['U_mdp'];
+
 			if(password_verify($_POST['mdpactu'], $mdp))
 			{				
 				$nouvmdp = $_POST['nouvmdp'];
 				$nouvmdpconf = $_POST['mdpconfirm'];
 				if(ModelUtilisateur::verifmdp($nouvmdp, $nouvmdpconf)==True)
 				{
-					
+					// 
 					$mdphash=password_hash($nouvmdp, PASSWORD_DEFAULT);
 					ModelUtilisateur::modifmdp($_SESSION['id'], $mdphash);
 					if(isset($_POST['nouvpseudo'])){
@@ -30,12 +31,17 @@ switch ($action) {
 					if(isset($_POST['nouvtele'])){
 						ModelUtilisateur::editTelUtilisateur($_SESSION['id'], $_POST['nouvtel']);
 					}
-					if(isset($_POST['nouvphoto'])){
-						ModelUtilisateur::editPhotoUtilisateur($_SESSION['id'], $_POST['nouvphoto']);
+					if(isset($_FILES['nouvphoto'])){
+						$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+						$name = basename($_FILES['nouvphoto']['name']);
+						if(move_uploaded_file($_FILES['nouvphoto']['tmp_name'], $path.$name)){
+							ModelUtilisateur::editPhotoUtilisateur($_SESSION['id'], $_FILES['nouvphoto']['name']);
+						}
+						
 					}
 					$ligne=ModelUtilisateur::GetUtilisateur($_SESSION['id']);
 					include 'vues/profil/MonProfil.php';
-					
+					// 
 
 				}else
 				{
@@ -45,11 +51,11 @@ switch ($action) {
 				}
 				
 			}else
-			{
+			// {
 				$verifactu=0;
 				$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
 				include "vues/profil/ModifProfil.php";
-			}
+			// }
 		/*	
 		}
 			$id = $_POST['code'];
