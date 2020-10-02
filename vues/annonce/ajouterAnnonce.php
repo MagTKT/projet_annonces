@@ -6,7 +6,7 @@
 			<th>Description</th>
 			<th>Prix</th>
 			<th>Date de fin de l'annonce</th>
-			<th>Photo</th>
+			<th><p>Le nom du fichier ne doit pas contenir d'accents ou de caractere speciaux.</p><p><center>Photo</center></p></th>
 			<th rowspan="2"><input type=submit name=valider></th>
 		</tr>
 		<tr>

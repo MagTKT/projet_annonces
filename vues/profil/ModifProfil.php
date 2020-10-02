@@ -10,7 +10,7 @@
 				<th>Mot de passe actuel</th>
 				<th>Nouveau mot de passe</th>
 				<th>Verrification du nouveau mot de passe</th>
-				<th>Photo de profil</th>
+				<th><p><center>Photo de profil</center></p><p>Le nom du fichier ne doit pas contenir d'accents ou de caractere speciaux.</p></th>
 			</tr>
 			<tr>
 				<td><p><input type=text name=nouvpseudo value=<?= $ligne['U_pseudo']; ?> required></p></td>
