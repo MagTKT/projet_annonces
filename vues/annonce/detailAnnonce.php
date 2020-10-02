@@ -19,9 +19,23 @@ $annonceur = ModelUtilisateur::getUtilisateur($CetteAnnonce['A_createur']);
 echo "<td><p>".$annonceur['U_pseudo']."</p></td>";
 echo "<td><p>".$CetteAnnonce['A_dateCreation']."</p></td>";
 echo "<td><p>".$CetteAnnonce['A_dateDeFin']."</p></td>";
-echo "<td><p>".$CetteAnnonce['A_photo1']."</p>";
-echo "<p>".$CetteAnnonce['A_photo2']."</p>";
-echo "<p>".$CetteAnnonce['A_photo3']."</p></td></tr>";
+echo "<td>";
+if($CetteAnnonce['A_photo1'] != "")
+{
+    $path1 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo1'];
+    echo "<p><img src='$path1'></p>";
+}
+if($CetteAnnonce['A_photo2'] != "")
+{
+    $path2 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo2'];
+    echo "<p><img src='$path2'></p>";
+}
+if($CetteAnnonce['A_photo3'] != "")
+{
+    $path3 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo3'];
+    echo "<p><img src='$path3'></p>";
+}
+echo "</td></tr>";
 
 ?>
 </table>

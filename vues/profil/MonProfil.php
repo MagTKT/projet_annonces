@@ -21,6 +21,7 @@
 		</table>
 		<br><a href="index.php?controleur=profil&action=modifProfil&id="<?= $_SESSION['id']; ?>>Modifier le profil</a>
 		<br><a href="index.php?controleur=annonce&action=AjouterAnnonce">Poster une annonce</a>
+		<!--<br><a href="index.php?controleur=annonce&action=AjouterAnnonceZip">Uploader une annonce</a>-->
 	</center>
 	<br><br>
 </div>

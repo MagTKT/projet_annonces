@@ -3,8 +3,9 @@
 
     <div id="navigation">
 		<ul>	
-			<li><a href="index.php?controleur=annonce&action=listeAnnonce">Liste annonces</a></li>
-			<!--<li><a href="index.php?controleur=annonce&action=ChercherAnnonce">Chercher une Annonce</a></li>-->
+		<li><a href="index.php?controleur=annonce&action=listeAnnonce">Accueil</a></li>
+		<li><a href="index.php?controleur=annonce&action=listeAnnonce">Liste annonces</a></li>
+		<!--<li><a href="index.php?controleur=annonce&action=ChercherAnnonce">Chercher une Annonce</a></li>-->
     	
 <?php
 //echo "<br>";

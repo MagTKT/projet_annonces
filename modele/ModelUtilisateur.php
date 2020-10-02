@@ -153,7 +153,7 @@ class ModelUtilisateur extends ModelPdo {
 		try{
 			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_id='$id'";
 			//echo $sql;
-	   		$result=ModelPdo::$pdo->exec($sql);
+   		$result=ModelPdo::$pdo->exec($sql);
 	   	}catch (PDOException $e)
 	   	{
 	   		echo $e->getMessage();
@@ -165,7 +165,7 @@ class ModelUtilisateur extends ModelPdo {
 		try{
 			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_mail='$mail'";
 			//echo $sql;
-	   		$result=ModelPdo::$pdo->exec($sql);
+	   	$result=ModelPdo::$pdo->exec($sql);
 	   	}catch (PDOException $e)
 	   	{
 	   		echo $e->getMessage();
