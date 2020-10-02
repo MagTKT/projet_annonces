@@ -27,8 +27,17 @@ switch ($action) {
 						if(isset($_POST['nouvmail'])){
 							ModelUtilisateur::editMailUtilisateur($_SESSION['id'], $_POST['nouvmail']);
 						}
-						if(isset($_POST['nouvtele'])){
-							ModelUtilisateur::editTelUtilisateur($_SESSION['id'], $_POST['nouvtel']);
+						if(isset($_POST['nouvtel'])){
+							$erreur = ModelUtilisateur::formatTEL($_POST['nouvtel']);
+							if(empty($erreur)){
+								ModelUtilisateur::editTelUtilisateur($_SESSION['id'], $_POST['nouvtel']);
+							}else{
+								$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
+								include "vues/profil/ModifProfil.php";
+								foreach ($erreur as $uneErreur) {
+									echo $uneErreur.'<br>';
+								}
+							}
 						}
 						if(isset($_FILES['nouvphoto'])){
 							$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
@@ -36,10 +45,11 @@ switch ($action) {
 							if(move_uploaded_file($_FILES['nouvphoto']['tmp_name'], $path.$name)){
 								ModelUtilisateur::editPhotoUtilisateur($_SESSION['id'], $_FILES['nouvphoto']['name']);
 							}
-							
 						}
-						$ligne=ModelUtilisateur::GetUtilisateur($_SESSION['id']);
-						include 'vues/profil/MonProfil.php';
+						if(empty($erreur)){
+							$ligne=ModelUtilisateur::GetUtilisateur($_SESSION['id']);
+							include 'vues/profil/MonProfil.php';
+						}
 					}else{
 						$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
 						include "vues/profil/ModifProfil.php";

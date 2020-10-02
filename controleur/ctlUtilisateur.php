@@ -17,15 +17,23 @@ switch ($action) {
 					//verifemail($mail) utiliser pour vérifier si le mail existe
 					$loginExist = ModelUtilisateur::verifLoginUnique($pseudo);
 					if (!$loginExist) {
-						$erreur = ModelUtilisateur::formatMDP($mdp);
+						$erreur = ModelUtilisateur::formatTEL($tel);
 						if(empty($erreur)){
-							if ($mdp === $check_U_mdp) {
-								$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
-								$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel,$dateCreation);
-								header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+							$erreur = ModelUtilisateur::formatMDP($mdp);
+							if(empty($erreur)){
+								if ($mdp === $check_U_mdp) {
+									$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
+									$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel,$dateCreation);
+									header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+								}else{
+									include 'vues/utilisateur/addUtilisateur.php';
+									echo 'Le mot de passe de vérification est différent.';
+								}
 							}else{
 								include 'vues/utilisateur/addUtilisateur.php';
-								echo 'Le mot de passe de vérification est différent.';
+								foreach ($erreur as $uneErreur) {
+									echo $uneErreur.'<br>';
+								}
 							}
 						}else{
 							include 'vues/utilisateur/addUtilisateur.php';
@@ -33,6 +41,7 @@ switch ($action) {
 								echo $uneErreur.'<br>';
 							}
 						}
+
 					}else{
 						include 'vues/utilisateur/addUtilisateur.php';
 						echo 'Le pseudo existe déjà en base.';

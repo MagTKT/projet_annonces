@@ -189,5 +189,19 @@ class ModelUtilisateur extends ModelPdo {
 		}
 		return $erreur;
 	}
+
+	public static function formatTEL($tel){
+		$erreur = [];
+		if($tel){
+			$pattern = '/^(?=.{10,}$)[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\0-9]*$/';
+			if(!preg_match($pattern,$tel)){
+				$erreur[] = 'Le téléphone n\'est pas valide, doit contenir :';
+				$erreur[] = '- 10 caractères minimum (plus si contient des ".","-" entre chaque chiffre et +33...)';
+			}
+		}else{
+			$erreur[] = 'Le téléphone est vide';		
+		}
+		return $erreur;
+	}
 }
 ?>

@@ -14,7 +14,7 @@
 				$path = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$ligne['U_photoProfil'];
 				echo "<tr><td>".$ligne['U_pseudo']."</td>";
 				echo "<td>".$ligne['U_mail']."</td>"; 
-				echo "<td>".$ligne['U_telephone']."</td>";
+				echo "<td>0".$ligne['U_telephone']."</td>";
 				echo "<td>".$ligne['U_dateCreation']."</td>";
 				echo "<td><img src='$path'></td>";
 			?>
