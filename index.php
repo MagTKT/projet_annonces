@@ -37,10 +37,11 @@ if(isset($_REQUEST['controleur']))
 		}
 		case "deconnexion" :{
 			session_destroy();
-			header('Location:index.php');
+			header('Location:index.php?controleur=annonce&action=listeAnnonce');
 			break;
 		}
 		case "connecte" :{
+			header('Location:index.php?controleur=annonce&action=listeAnnonce');
 			break;
 		}
 	}	
