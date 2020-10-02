@@ -8,39 +8,46 @@ switch ($action) {
 		break;
 	}
 	case "modifProfil" :{
-		if(!isset($_GET['id']))
-		{
+		if(!isset($_GET['id'])){
 			$log = ModelUtilisateur::getUtilisateur($_SESSION['id']);
 			$mdp = $log['U_mdp'];
 
-			if(password_verify($_POST['mdpactu'], $mdp))
-			{				
+			if(password_verify($_POST['mdpactu'], $mdp)){				
 				$nouvmdp = $_POST['nouvmdp'];
 				$nouvmdpconf = $_POST['mdpconfirm'];
-				if(ModelUtilisateur::verifmdp($nouvmdp, $nouvmdpconf)==True)
-				{
-					// 
-					$mdphash=password_hash($nouvmdp, PASSWORD_DEFAULT);
-					ModelUtilisateur::modifmdp($_SESSION['id'], $mdphash);
-					if(isset($_POST['nouvpseudo'])){
-						ModelUtilisateur::editPseudoUtilisateur($_SESSION['id'], $_POST['nouvpseudo']);
-					}
-					if(isset($_POST['nouvmail'])){
-						ModelUtilisateur::editMailUtilisateur($_SESSION['id'], $_POST['nouvmail']);
-					}
-					if(isset($_POST['nouvtele'])){
-						ModelUtilisateur::editTelUtilisateur($_SESSION['id'], $_POST['nouvtel']);
-					}
-					if(isset($_FILES['nouvphoto'])){
-						$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
-						$name = basename($_FILES['nouvphoto']['name']);
-						if(move_uploaded_file($_FILES['nouvphoto']['tmp_name'], $path.$name)){
-							ModelUtilisateur::editPhotoUtilisateur($_SESSION['id'], $_FILES['nouvphoto']['name']);
+				
+				if(ModelUtilisateur::verifmdp($nouvmdp, $nouvmdpconf)==True){
+					$erreur = ModelUtilisateur::formatMDP($nouvmdp);
+					if(empty($erreur)){
+						$mdphash=password_hash($nouvmdp, PASSWORD_DEFAULT);
+						ModelUtilisateur::modifmdp($_SESSION['id'], $mdphash);
+						if(isset($_POST['nouvpseudo'])){
+							ModelUtilisateur::editPseudoUtilisateur($_SESSION['id'], $_POST['nouvpseudo']);
 						}
-						
+						if(isset($_POST['nouvmail'])){
+							ModelUtilisateur::editMailUtilisateur($_SESSION['id'], $_POST['nouvmail']);
+						}
+						if(isset($_POST['nouvtele'])){
+							ModelUtilisateur::editTelUtilisateur($_SESSION['id'], $_POST['nouvtel']);
+						}
+						if(isset($_FILES['nouvphoto'])){
+							$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+							$name = basename($_FILES['nouvphoto']['name']);
+							if(move_uploaded_file($_FILES['nouvphoto']['tmp_name'], $path.$name)){
+								ModelUtilisateur::editPhotoUtilisateur($_SESSION['id'], $_FILES['nouvphoto']['name']);
+							}
+							
+						}
+						$ligne=ModelUtilisateur::GetUtilisateur($_SESSION['id']);
+						include 'vues/profil/MonProfil.php';
+					}else{
+						$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
+						include "vues/profil/ModifProfil.php";
+						foreach ($erreur as $uneErreur) {
+							echo $uneErreur.'<br>';
+						}
 					}
-					$ligne=ModelUtilisateur::GetUtilisateur($_SESSION['id']);
-					include 'vues/profil/MonProfil.php';
+
 					// 
 
 				}else
@@ -50,12 +57,11 @@ switch ($action) {
 					include "vues/profil/ModifProfil.php";
 				}
 				
-			}else
-			// {
+			}else{
 				$verifactu=0;
 				$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
 				include "vues/profil/ModifProfil.php";
-			// }
+			}
 		/*	
 		}
 			$id = $_POST['code'];

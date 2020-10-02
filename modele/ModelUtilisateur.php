@@ -112,13 +112,6 @@ class ModelUtilisateur extends ModelPdo {
 			$result = ModelPdo::$pdo->query($sql);
 			$unmail = $result->fetch();
 			return $unmail;
-		/*	if($unmail==$mail)
-			{
-				return True;
-			}else
-			{
-				return False;
-			}*/
 	} catch (PDOException $e) 
 		{
 		echo $e->getMessage();
@@ -127,11 +120,9 @@ class ModelUtilisateur extends ModelPdo {
 	}
 	public static function verifcode($code,$codeverif){
 		try{
-			if($code==$codeverif)
-			{
+			if($code==$codeverif){
 				return True;
-			}else
-			{
+			}else{
 				return False;
 			}
 		}catch (PDOException $e) 
@@ -161,7 +152,7 @@ class ModelUtilisateur extends ModelPdo {
 	public static function modifmdp($id, $nouvmdp){
 		try{
 			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_id='$id'";
-			echo $sql;
+			//echo $sql;
 	   		$result=ModelPdo::$pdo->exec($sql);
 	   	}catch (PDOException $e)
 	   	{
@@ -169,9 +160,34 @@ class ModelUtilisateur extends ModelPdo {
 	   		die("Erreur dans la BDD");
 	   	}
 	}
+
+	public static function modifmdpoubli($mail, $nouvmdp){
+		try{
+			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_mail='$mail'";
+			//echo $sql;
+	   		$result=ModelPdo::$pdo->exec($sql);
+	   	}catch (PDOException $e)
+	   	{
+	   		echo $e->getMessage();
+	   		die("Erreur dans la BDD");
+	   	}
+	}
+
+	public static function formatMDP($mdp){
+		$erreur = [];
+		if($mdp){
+			$pattern = '/^(?=.{8,}$)(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?\W).*$/';
+			if(!preg_match($pattern,$mdp)){
+				$erreur[] = 'Le mot de passe n\'est pas valide, doit contenir :';
+				$erreur[] = '- 8 caractères minimum';
+				$erreur[] = '- une lettre';
+				$erreur[] = '- un chiffre';
+				$erreur[] = '- un caractère spécial (@!$£...)';
+			}
+		}else{
+			$erreur[] = 'Le mot de passe est vide';		
+		}
+		return $erreur;
+	}
 }
-
-   
-
-
 ?>

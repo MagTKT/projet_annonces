@@ -1,6 +1,6 @@
 <div id="contenu">
 	<h2>Mon profil</h2><hr>
-	<a href="index.php?controleur=profil&action=mesMessages">Mes messages</a>
+	<a href="index.php?controleur=profil&action=mesMessages">Mes messages (non codé :/)</a>
 	<center>
 		<table border="1" cellpadding="15">
 			<tr>
