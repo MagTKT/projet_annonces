@@ -25,7 +25,16 @@ switch ($action) {
 							ModelUtilisateur::editPseudoUtilisateur($_SESSION['id'], $_POST['nouvpseudo']);
 						}
 						if(isset($_POST['nouvmail'])){
-							ModelUtilisateur::editMailUtilisateur($_SESSION['id'], $_POST['nouvmail']);
+							$erreur = ModelUtilisateur::formatMAIL($_POST['nouvmail']);
+							if(empty($erreur)){
+								ModelUtilisateur::editMailUtilisateur($_SESSION['id'], $_POST['nouvmail']);
+							}else{
+								$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
+								include "vues/profil/ModifProfil.php";
+								foreach ($erreur as $uneErreur) {
+									echo $uneErreur.'<br>';
+								}
+							}
 						}
 						if(isset($_POST['nouvtel'])){
 							$erreur = ModelUtilisateur::formatTEL($_POST['nouvtel']);

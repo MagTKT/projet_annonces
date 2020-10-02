@@ -203,5 +203,18 @@ class ModelUtilisateur extends ModelPdo {
 		}
 		return $erreur;
 	}
+
+	public static function formatMAIL($mail){
+		$erreur = [];
+		if($mail){
+			$pattern = '/^.+\@\S+\.\S+$/';
+			if(!preg_match($pattern,$mail)){
+				$erreur[] = 'Le mail n\'est pas valide';
+			}
+		}else{
+			$erreur[] = 'Le mail est vide';		
+		}
+		return $erreur;
+	}
 }
 ?>
