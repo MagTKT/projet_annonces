@@ -26,6 +26,12 @@ switch ($action) {
 		include 'vues/annonce/detailAnnonce.php';
 		break;
 	}
+	case "contactAnnonce" :{
+		$id = $_GET['contact_annonce'];
+		$CtAnnonce = ModelAnnonce::getCtAnnonce($id);
+		include 'vues/annonce/contactAnnonce.php';
+		break;
+	}
 	case "AjouterAnnonce" :{
 		if(isset($_POST['titre'])&& isset($_POST['prix'])&& isset($_POST['description'])&& isset($_POST['dateFin']))
 		{

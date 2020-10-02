@@ -16,7 +16,7 @@ echo "<tr><td><p>".$CetteAnnonce['A_titre']."</p></td>";
 echo "<td><p>".$CetteAnnonce['A_description']."</p></td>";
 echo "<td><p>".$CetteAnnonce['A_prix']."</p></td>";
 $annonceur = ModelUtilisateur::getUtilisateur($CetteAnnonce['A_createur']);
-echo "<td><p>".$annonceur['U_pseudo']."</p></td>";
+echo "<td><p>".$annonceur['U_pseudo']."<p><a href='contactAnnonce.php'>".$ctAnnonce.'Contact'."</a></p></td>";
 echo "<td><p>".$CetteAnnonce['A_dateCreation']."</p></td>";
 echo "<td><p>".$CetteAnnonce['A_dateDeFin']."</p></td>";
 echo "<td>";
