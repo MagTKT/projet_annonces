@@ -29,8 +29,16 @@ switch ($action) {
 	case "AjouterAnnonce" :{
 		if(isset($_POST['titre'])&& isset($_POST['prix'])&& isset($_POST['description'])&& isset($_POST['dateFin']))
 		{
-			ModelAnnonce::AjouterAnnonce($_SESSION['id'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['dateFin'], $_POST['photo1'], $_POST['photo2'], $_POST['photo3']);
-			header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
+			$today = date("Y-m-d H:i:s");
+			if( $today < $_POST['dateFin'] ) 
+			{
+				ModelAnnonce::AjouterAnnonce($_SESSION['id'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['dateFin'], $_POST['photo1'], $_POST['photo2'], $_POST['photo3']);
+				header('Location: index.php?controleur=annonce&action=AjouterAnnonce&verifReussite=0');
+			}else 
+			{
+				$verifDate = 0;
+				include 'vues/annonce/ajouterAnnonce.php';
+			}
 		}else
 		{
 			include 'vues/annonce/ajouterAnnonce.php';
