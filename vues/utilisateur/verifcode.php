@@ -12,9 +12,9 @@
 				<tr>
 					<td>Entrez le code : <input type=int name=codeverif placeholder="123456">
 					</td>
-			<?php $testcode=$_GET['code'];
-			echo $testcode;
-			?>
+					<?php $testcode=$_GET['code'];
+					echo $testcode.' (affiché pour le local)';
+					?>
 					<input type="hidden" name=code value="<?php echo $_GET['code']; ?>">
 					<input type="hidden" name=mail value="<?php echo $_GET['mail']; ?>">
 					<td><input type=submit name=valider></td>
@@ -23,11 +23,12 @@
 		</form>
 		<a href="../../index.php">Annuler</a>
 	</center>
-<?php 
-if(isset($_GET['verif']))
-	if($_GET['verif']==0)
-		{
+	<?php 
+	if(isset($_GET['verif'])){
+		if($_GET['verif']===0){
 			echo "<font color=red>Votre code est mauvais</font>"; 
 		}
-?>
+	}
+
+	?>
 </div>

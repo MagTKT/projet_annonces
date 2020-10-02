@@ -15,7 +15,7 @@
 			<tr>
 				<td><p><input type=text name=nouvpseudo value=<?= $ligne['U_pseudo']; ?> required></p></td>
 				<td><p><input type=email name=nouvmail value=<?= $ligne['U_mail'] ?> required></p></td>
-				<td><p><input type=number name=nouvtel value=<?= $ligne['U_telephone'] ?> required></p></td>
+				<td><p><input type=text name=nouvtel value=<?= '0'.$ligne['U_telephone'] ?> required></p></td>
 				<td>
 					<p><input type=password name=mdpactu required></p>
 				<?php 

@@ -1,6 +1,6 @@
 <div id="contenu">
 	<h2>Mon profil</h2><hr>
-	<a href="index.php?controleur=profil&action=mesMessages">Mes messages</a>
+	<a href="index.php?controleur=profil&action=mesMessages">Mes messages (non codé :/)</a>
 	<center>
 		<table border="1" cellpadding="15">
 			<tr>
@@ -14,7 +14,7 @@
 				$path = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$ligne['U_photoProfil'];
 				echo "<tr><td>".$ligne['U_pseudo']."</td>";
 				echo "<td>".$ligne['U_mail']."</td>"; 
-				echo "<td>".$ligne['U_telephone']."</td>";
+				echo "<td>0".$ligne['U_telephone']."</td>";
 				echo "<td>".$ligne['U_dateCreation']."</td>";
 				echo "<td><img src='$path'></td>";
 			?>

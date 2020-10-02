@@ -11,28 +11,53 @@ switch ($action) {
 				$check_U_mdp=$_POST['check_U_mdp'];
 				$tel=$_POST['U_telephone'];
 				$dateCreation = date('Y-m-d H:i:s');
-				
-				$mailExist = ModelUtilisateur::verifemail($mail);
-				if (!$mailExist) {
-					//verifemail($mail) utiliser pour vérifier si le mail existe
-					$loginExist = ModelUtilisateur::verifLoginUnique($pseudo);
-					if (!$loginExist) {
-						if ($mdp === $check_U_mdp) {
-							$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
-							$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel,$dateCreation);
-							header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+
+				$erreur = ModelUtilisateur::formatMAIL($mail);
+				if(empty($erreur)){
+					$mailExist = ModelUtilisateur::verifemail($mail);
+					if (!$mailExist) {
+						//verifemail($mail) utiliser pour vérifier si le mail existe
+						$loginExist = ModelUtilisateur::verifLoginUnique($pseudo);
+						if (!$loginExist) {
+							$erreur = ModelUtilisateur::formatTEL($tel);
+							if(empty($erreur)){
+								$erreur = ModelUtilisateur::formatMDP($mdp);
+								if(empty($erreur)){
+									if ($mdp === $check_U_mdp) {
+										$mdphash=password_hash($mdp, PASSWORD_DEFAULT);
+										$lignes = ModelUtilisateur::ajouterUtilisateur($pseudo, $mdphash, $mail, $tel,$dateCreation);
+										header('Location: index.php?controleur=utilisateur&action=listeAnnonce');
+									}else{
+										include 'vues/utilisateur/addUtilisateur.php';
+										echo 'Le mot de passe de vérification est différent.';
+									}
+								}else{
+									include 'vues/utilisateur/addUtilisateur.php';
+									foreach ($erreur as $uneErreur) {
+										echo $uneErreur.'<br>';
+									}
+								}
+							}else{
+								include 'vues/utilisateur/addUtilisateur.php';
+								foreach ($erreur as $uneErreur) {
+									echo $uneErreur.'<br>';
+								}
+							}
+
 						}else{
 							include 'vues/utilisateur/addUtilisateur.php';
-							echo 'Le mot de passe de vérification est différent.';
+							echo 'Le pseudo existe déjà en base.';
 						}
+
 					}else{
 						include 'vues/utilisateur/addUtilisateur.php';
-						echo 'Le pseudo existe déjà en base.';
+						echo 'Le mail existe déjà en base.';
 					}
-
 				}else{
 					include 'vues/utilisateur/addUtilisateur.php';
-					echo 'Le mail existe déjà en base.';
+					foreach ($erreur as $uneErreur) {
+						echo $uneErreur.'<br>';
+					}
 				}
 
 
@@ -133,34 +158,35 @@ switch ($action) {
 		$codeverif = $_POST['codeverif'];
 		$code = $_POST['code'];
 		$mail = $_POST['mail'];
-		if(ModelUtilisateur::verifcode($code, $codeverif)==True)
-			{
-				echo "yes";
-				echo $mail;
-				header('Location: vues/utilisateur/nouvmotdepasse.php?mail='.$mail.'');
-			}else
-			{
-				$verif=0;
-				header('Location: vues/utilisateur/verifcode.php?code='.$code.'&verif='.$verif.'&mail='.$mail.'');
-			}
-			break;
+		if(ModelUtilisateur::verifcode($code, $codeverif)==True){
+			echo "yes";
+			echo $mail;
+			header('Location: vues/utilisateur/nouvmotdepasse.php?mail='.$mail.'');
+		}else
+		{
+			$verif=0;
+			header('Location: vues/utilisateur/verifcode.php?code='.$code.'&verif='.$verif.'&mail='.$mail.'');
 		}
+		break;
+	}
 	case "verifmdp" :{
 		$nouvmdp = $_POST['newmdp'];
 		$nouvmdpconf = $_POST['newmdp2'];
 		$mail = $_POST['mail'];
-		if(ModelUtilisateur::verifmdp($nouvmdp, $nouvmdpconf)==True)
-			{
+		if(ModelUtilisateur::verifmdp($nouvmdp, $nouvmdpconf)==True){
+			$erreur = ModelUtilisateur::formatMDP($nouvmdp);
+			if(empty($erreur)){
 				$mdphash=password_hash($nouvmdp, PASSWORD_DEFAULT);
-				ModelUtilisateur::modifmdp($mail, $mdphash);
-				echo "ok";
+				ModelUtilisateur::modifmdpoubli($mail, $mdphash);
 				header('Location: index.php');
-			}else
-			{
-				$verif=0;
-				header('Location: vues/utilisateur/nouvmotdepasse.php?mail='.$mail.'&verif='.$verif.'');
+			}else{
+				header('Location: vues/utilisateur/nouvmotdepasse.php?mail='.$mail.'&verif='.$verif.'&erreur='.serialize($erreur));
 			}
-			break;
-		}	
-	}
+		}else{
+			$verif=0;
+			header('Location: vues/utilisateur/nouvmotdepasse.php?mail='.$mail.'&verif='.$verif.'');
+		}
+		break;
+	}	
+}
 ?>

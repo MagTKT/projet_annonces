@@ -17,11 +17,18 @@
 		<a href="../../index.php">Annuler</a>
 	</center>
 	<?php 
-	if(isset($_GET['verif']))
-		if($_GET['verif']==0)
-			{
-				echo "Les mots de passes ne correspondent pas"; 
-			}
+	if(isset($_GET['verif'])){
+		//echo $_GET['verif'];
+		if($_GET['verif']===0){
+			echo "Les mots de passes ne correspondent pas"; 
+		}
+	}
+	if(isset($_GET['erreur'])){
+		$erreur = unserialize($_GET['erreur']);
+		foreach ($erreur as $uneErreur) {
+			echo $uneErreur.'<br>';
+		}
+	}
 	?>
 </form>
 </div>

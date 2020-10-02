@@ -20,7 +20,7 @@ class ModelAnnonce extends ModelPdo {
 			$CetteAnnonce = $result->fetch();
 			return $CetteAnnonce;
 		}catch (PDOException $e) {
-			echo $e->getMessage;
+			echo $e->getMessage();
 			die("Erreur dans la BDD");
 		}
 	}
@@ -124,7 +124,7 @@ class ModelAnnonce extends ModelPdo {
 			echo $sql;
 			$result = ModelPdo::$pdo->exec($sql);
 		}catch(PDOException $e) {
-			echo $e->getMessage;
+			echo $e->getMessage();
 			die("Erreur dans la BDD");
 		}
 	}
