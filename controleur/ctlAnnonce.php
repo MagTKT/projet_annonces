@@ -43,6 +43,28 @@ switch ($action) {
 		header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
 		break;
 	}
+	case "suppPhoto" :{
+		if(isset($_GET['code_annonce'])&& isset($_GET['num_photo']))
+		{
+			$codeAnnonce = $_GET['code_annonce'];
+			$numPhoto = $_GET['num_photo'];
+			switch ($numPhoto) {
+				case "1" :{
+					ModelAnnonce::suppPhoto1($codeAnnonce);
+					break;
+				}
+				case "2" :{
+					ModelAnnonce::suppPhoto2($codeAnnonce);
+					break;
+				}
+				case "3" :{
+					ModelAnnonce::suppPhoto3($codeAnnonce);
+					break;
+				}
+			}
+		}
+
+	}
 	case "editAnnonce" :{
 		if(isset($_POST['codeAnnonce'])&& isset($_POST['titre'])&& isset($_POST['description'])&& isset($_POST['dateFin'])&& isset($_POST['prix']))
 		{

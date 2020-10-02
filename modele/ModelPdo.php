@@ -7,7 +7,7 @@ class ModelPdo {
         $host = 'localhost';
         $dbname= 'petites_annonces';
         $login = 'root';
-        $pass= '';
+        $pass= 'root';
 
         try {
             // Connexion à la base de données            

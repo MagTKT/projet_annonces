@@ -23,9 +23,28 @@
 				<th>Photo 3</th>
 			</tr>
 			<tr>
-				<td><input type=file name=photo1 value=<?= $CetteAnnonce['A_photo1']; ?>></td>
-				<td><input type=file name=photo2 value=<?= $CetteAnnonce['A_photo2']; ?>></td>
-				<td><input type=file name=photo3 value=<?= $CetteAnnonce['A_photo3']; ?>></td>
+				<?php
+				$path1 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo1'];
+				echo "<td><img src='$path1'></td>";
+				$path2 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo2'];
+				echo "<td><img src='$path2'></td>";
+				$path3 = 'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$CetteAnnonce['A_photo3'];
+				echo "<td><img src='$path3'></td>";
+				?>
+			</tr>
+			<tr>
+				<td>
+					<input type=file name=photo1 value=<?= $CetteAnnonce['A_photo1']; ?>>
+					<a href='index.php?controleur=annonce&action=suppPhoto&code_annonce=<?= $CetteAnnonce['A_id']; ?>&num_photo=1'><img src='public\images/supp.jpg' width=50 height=50/></a>
+				</td>
+				<td>
+					<input type=file name=photo2 value=<?= $CetteAnnonce['A_photo2']; ?>>
+					<a href='index.php?controleur=annonce&action=suppPhoto&code_annonce=<?= $CetteAnnonce['A_id']; ?>&num_photo=2'><img src='public\images/supp.jpg' width=50 height=50/></a>
+				</td>
+				<td>
+					<input type=file name=photo3 value=<?= $CetteAnnonce['A_photo3']; ?>>
+					<a href='index.php?controleur=annonce&action=suppPhoto&code_annonce=<?= $CetteAnnonce['A_id']; ?>&num_photo=3'><img src='public\images/supp.jpg' width=50 height=50/></a>
+				</td>
 			</tr>
 		</table>
 		<br>
