@@ -89,6 +89,34 @@ class ModelAnnonce extends ModelPdo {
             die("Erreur dans la BDD ");
         	}		
 	}
+	public static function suppPhoto1($codeAnnonce){
+		try{
+			$sql = "UPDATE annonce SET A_photo1 = '' WHERE A_id = '$codeAnnonce'";
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
+	public static function suppPhoto2($codeAnnonce){
+		try{
+			$sql = "UPDATE annonce SET A_photo2 = '' WHERE A_id = '$codeAnnonce'";
+			//echo $sql;
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
+	public static function suppPhoto3($codeAnnonce){
+		try{
+			$sql = "UPDATE annonce SET A_photo3 = '' WHERE A_id = '$codeAnnonce'";
+			$result = ModelPdo::$pdo->exec($sql);
+		}catch(PDOException $e) {
+			echo $e->getMessage;
+			die("Erreur dans la BDD");
+		}
+	}
 
 	public static function AjouterAnnonce($id, $titre, $prix, $description, $dateFin, $photo1, $photo2, $photo3){
 		try{
