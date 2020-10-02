@@ -12,11 +12,13 @@
 				<td><input type=text name=titre value=<?= $CetteAnnonce['A_titre']; ?> required></td>
 				<td><input type=text name=description value=<?= $CetteAnnonce['A_description']; ?> required></td>
 				<td><input type=number name=prix value=<?= $CetteAnnonce['A_prix']; ?> required></td>
-				<td><input type=datetime-local name=dateFin value=<?= $CetteAnnonce['A_dateDeFin']; ?> required></td>
+				<td><input type=datetime-local name=dateFin value=<?= date('Y-m-d\TH:i', strtotime($CetteAnnonce['A_dateDeFin'])); ?> required></td>
 			</tr>
 		</table>
 		<br>
 		<table border="1" cellpadding="15">
+			
+			<tr colspan="3"><th colspan="3"><center>Le nom du fichier ne doit pas contenir d'accents ou de caractere speciaux.</center></th></tr>
 			<tr>
 				<th>Photo 1</th>
 				<th>Photo 2</th>

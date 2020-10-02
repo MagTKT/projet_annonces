@@ -161,7 +161,7 @@ class ModelUtilisateur extends ModelPdo {
 	public static function modifmdp($id, $nouvmdp){
 		try{
 			$sql = "UPDATE utilisateur SET U_mdp='$nouvmdp' WHERE U_id='$id'";
-			echo $sql;
+			//echo $sql;
 	   		$result=ModelPdo::$pdo->exec($sql);
 	   	}catch (PDOException $e)
 	   	{

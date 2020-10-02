@@ -51,11 +51,11 @@ switch ($action) {
 				}
 				
 			}else
-			// {
+			{
 				$verifactu=0;
 				$ligne = ModelUtilisateur::GetUtilisateur($_SESSION['id']);
 				include "vues/profil/ModifProfil.php";
-			// }
+			}
 		/*	
 		}
 			$id = $_POST['code'];

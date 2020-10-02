@@ -46,18 +46,30 @@ switch ($action) {
 	case "editAnnonce" :{
 		if(isset($_POST['codeAnnonce'])&& isset($_POST['titre'])&& isset($_POST['description'])&& isset($_POST['dateFin'])&& isset($_POST['prix']))
 		{
-			ModelAnnonce::editAnnonce($_POST['codeAnnonce'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['codeAnnonce']);
-			if(isset($_POST['photo1'])) 
+			ModelAnnonce::editAnnonce($_POST['codeAnnonce'], $_POST['titre'], $_POST['prix'], $_POST['description'], $_POST['dateFin']);
+			if(isset($_FILES['photo1'])) 
 			{
-				ModelAnnonce::editAnnoncePhoto1($_POST['codeAnnonce'], $_POST['photo1']);
+				$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+				$name = basename($_FILES['photo1']['name']);
+				if(move_uploaded_file($_FILES['photo1']['tmp_name'], $path.$name)){
+					ModelAnnonce::editAnnoncePhoto1($_POST['codeAnnonce'], $_FILES['photo1']['name']);
+				}
 			}
-			if(isset($_POST['photo2'])) 
+			if(isset($_FILES['photo2'])) 
 			{
-				ModelAnnonce::editAnnoncePhoto2($_POST['codeAnnonce'], $_POST['photo2']);
+				$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+				$name = basename($_FILES['photo2']['name']);
+				if(move_uploaded_file($_FILES['photo2']['tmp_name'], $path.$name)){
+					ModelAnnonce::editAnnoncePhoto2($_POST['codeAnnonce'], $_FILES['photo2']['name']);
+				}
 			}
-			if(isset($_POST['photo3'])) 
+			if(isset($_FILES['photo3'])) 
 			{
-				ModelAnnonce::editAnnoncePhoto3($_POST['codeAnnonce'], $_POST['photo3']);
+				$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+				$name = basename($_FILES['photo3']['name']);
+				if(move_uploaded_file($_FILES['photo3']['tmp_name'], $path.$name)){
+					ModelAnnonce::editAnnoncePhoto3($_POST['codeAnnonce'], $_FILES['photo3']['name']);
+				}
 			}
 			header('Location: index.php?controleur=annonce&action=listeMesAnnonces');
 		}else
